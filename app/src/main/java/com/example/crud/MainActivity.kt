@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         btnAdd.setOnClickListener { addStudent() }
         btnView.setOnClickListener{ getStudent() }
+        adapter?.setOnclickItem {  showMessage("click ${it.name}")}
     }
 
     private fun getStudent() {
