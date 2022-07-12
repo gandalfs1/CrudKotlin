@@ -1,6 +1,8 @@
 package com.example.crud
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -23,7 +25,14 @@ class MainActivity : AppCompatActivity() {
         sqLiteHelper = SQLiteHelper(this)
 
         btnAdd.setOnClickListener { addStudent() }
+        btnView.setOnClickListener{ getStudent() }
     }
+
+    private fun getStudent() {
+        val stdList = sqLiteHelper.getAllStudent()
+        Log.e("listStudent", "${stdList.size}")
+    }
+
 
     private fun addStudent() {
         val nameData = edName.text.toString()
