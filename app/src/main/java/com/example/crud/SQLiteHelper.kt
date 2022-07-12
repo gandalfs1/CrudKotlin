@@ -90,4 +90,20 @@ class SQLiteHelper(context: Context) :
         }
         return studentList
     }
+
+    /**
+     * metodo que actualizar un estudiante de la base de datos
+     */
+    fun updateStudent(student: Student): Int{
+        val db = this.writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(ID, student.id)
+        contentValues.put(NAME, student.name)
+        contentValues.put(EMAIL, student.email)
+
+        val success = db.update(TABLE_NAME, contentValues, "id="+student.id, null)
+        db.close()
+        return success
+    }
 }
