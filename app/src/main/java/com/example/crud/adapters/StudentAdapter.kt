@@ -11,6 +11,7 @@ import com.example.crud.models.Student
 
 class StudentAdapter : RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() {
     private var stdList: ArrayList<Student> = ArrayList()
+    private var onClickItem: ((Student) -> Unit)? = null
 
     fun additems(items: ArrayList<Student>) {
         this.stdList = items
@@ -24,6 +25,11 @@ class StudentAdapter : RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() 
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
         val std = stdList[position]
         holder.bindView(std)
+        holder.itemView.setOnClickListener{ onClickItem?.invoke(std)}
+    }
+
+    fun setOnclickItem(callback: (Student) -> Unit) {
+        this.onClickItem = callback
     }
 
     override fun getItemCount(): Int {
