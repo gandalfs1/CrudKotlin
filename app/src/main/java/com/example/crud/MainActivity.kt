@@ -30,18 +30,19 @@ class MainActivity : AppCompatActivity() {
         val emailData = edEmail.text.toString()
 
         if (nameData.isEmpty() || emailData.isEmpty()) {
-            Toast.makeText(this, "ingrese datos", Toast.LENGTH_SHORT).show()
-        } else {
-            val std = Student(name = nameData, email = emailData)
-            val status = sqLiteHelper.insertStudent(std)
-
-            if (status > -1) {
-                Toast.makeText(this, "Datos Agregados Correctamente", Toast.LENGTH_SHORT).show()
-                clearEditext()
-            }else{
-                Toast.makeText(this, "Error Al Agregar Datos", Toast.LENGTH_SHORT).show()
-            }
+            showMessage("Debe ingresar todos los datos")
+            return;
         }
+        val std = Student(name = nameData, email = emailData)
+        val status = sqLiteHelper.insertStudent(std)
+
+        if (status > -1) {
+            showMessage("Datos Agregados Correctamente")
+            clearEditext()
+        } else {
+            showMessage("Error Al Agregar Datos")
+        }
+
     }
 
     private fun clearEditext() {
@@ -55,5 +56,9 @@ class MainActivity : AppCompatActivity() {
         edEmail = findViewById(R.id.emailUser)
         btnAdd = findViewById(R.id.btnAdd)
         btnView = findViewById(R.id.btnView)
+    }
+
+    private fun showMessage(msg: String){
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }
