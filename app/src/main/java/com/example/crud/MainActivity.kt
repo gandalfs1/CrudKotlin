@@ -17,10 +17,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var edEmail: EditText
     private lateinit var btnAdd: Button
     private lateinit var btnView: Button
+    private lateinit var btnUpdate: Button
 
     private lateinit var sqLiteHelper: SQLiteHelper
     private lateinit var recyclerview : RecyclerView
     private var adapter: StudentAdapter? = null
+    private var std: Student? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +34,37 @@ class MainActivity : AppCompatActivity() {
 
         btnAdd.setOnClickListener { addStudent() }
         btnView.setOnClickListener{ getStudent() }
-        adapter?.setOnclickItem {  showMessage("click ${it.name}")}
+        adapter?.setOnclickItem {  showMessage("click ${it.name}")
+            edName.setText(it.name)
+            edEmail.setText(it.email)
+            std = it
+        }
+        btnUpdate.setOnClickListener { updateStudent() }
+    }
+
+    private fun updateStudent() {
+        val name = edName.text.toString()
+        val email = edEmail.text.toString()
+
+        if (name.isEmpty() || email.isEmpty() ){
+            showMessage("debe seleccionar un estudiante de lista")
+            return
+        }
+
+        if(std == null || std?.id == 0){
+            showMessage("debe registar primero antes de actualizarlo")
+            return
+        }
+
+        val std = Student(id = std!!.id, name = name, email = email)
+        val status = sqLiteHelper.updateStudent(std)
+        if (status > -1) {
+            showMessage("Datos Actualizado Correctamente")
+            clearEditext()
+            getStudent()
+        } else {
+            showMessage("Error Al Actualizar Datos")
+        }
     }
 
     private fun getStudent() {
@@ -69,6 +101,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun clearEditext() {
+        std?.id = 0
         edName.setText("")
         edEmail.setText("")
         edName.requestFocus()
@@ -80,6 +113,7 @@ class MainActivity : AppCompatActivity() {
         btnAdd = findViewById(R.id.btnAdd)
         btnView = findViewById(R.id.btnView)
         recyclerview = findViewById(R.id.recyclerView)
+        btnUpdate = findViewById(R.id.btnUpdate)
     }
 
     private fun showMessage(msg: String){
