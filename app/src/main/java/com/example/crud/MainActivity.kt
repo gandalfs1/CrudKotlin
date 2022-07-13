@@ -53,7 +53,11 @@ class MainActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage("Estas seguro que quieres eliminar este estudiante?")
         builder.setCancelable(true)
-        builder.setPositiveButton("Si"){ dialog,_-> dialog.dismiss()}
+        builder.setPositiveButton("Si"){ dialog,_->
+            sqLiteHelper.deleteStudentById(id)
+            getStudent()
+            dialog.dismiss()
+        }
         builder.setNegativeButton("No"){ dialog,_-> dialog.dismiss()}
 
         val alert = builder.create()
