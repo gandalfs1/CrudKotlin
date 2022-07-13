@@ -12,10 +12,15 @@ import com.example.crud.models.Student
 class StudentAdapter : RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() {
     private var stdList: ArrayList<Student> = ArrayList()
     private var onClickItem: ((Student) -> Unit)? = null
+    private var onClickDeleteItem: ((Student) -> Unit)? = null
 
     fun additems(items: ArrayList<Student>) {
         this.stdList = items
         notifyDataSetChanged()
+    }
+
+    fun setOnClickDeleteItem(callback: (Student) ->Unit){
+        this.onClickDeleteItem = callback
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = StudentViewHolder(
@@ -26,6 +31,7 @@ class StudentAdapter : RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() 
         val std = stdList[position]
         holder.bindView(std)
         holder.itemView.setOnClickListener{ onClickItem?.invoke(std)}
+        holder.btnDelete.setOnClickListener{ onClickDeleteItem?.invoke(std)}
     }
 
     fun setOnclickItem(callback: (Student) -> Unit) {
@@ -40,8 +46,7 @@ class StudentAdapter : RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() 
         private var id = view.findViewById<TextView>(R.id.tvId)
         private var name = view.findViewById<TextView>(R.id.tvName)
         private var email = view.findViewById<TextView>(R.id.tvEmail)
-
-        private var btnDelete = view.findViewById<Button>(R.id.btnDelete)
+        var btnDelete = view.findViewById<Button>(R.id.btnDelete)
 
         fun bindView(std: Student) {
             id.text = std.id.toString()

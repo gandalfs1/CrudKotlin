@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,27 @@ class MainActivity : AppCompatActivity() {
             std = it
         }
         btnUpdate.setOnClickListener { updateStudent() }
+
+        adapter?.setOnClickDeleteItem { showMessage("se eliminara ${it.name}")
+            deleteStudent(it.id)
+        }
+    }
+
+    private fun deleteStudent(id: Int){
+        if (id==null)return
+
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("Estas seguro que quieres eliminar este estudiante?")
+        builder.setCancelable(true)
+        builder.setPositiveButton("Si"){ dialog,_->
+            sqLiteHelper.deleteStudentById(id)
+            getStudent()
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("No"){ dialog,_-> dialog.dismiss()}
+
+        val alert = builder.create()
+        alert.show()
     }
 
     private fun updateStudent() {
