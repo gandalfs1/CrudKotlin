@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity() {
             std = it
         }
         btnUpdate.setOnClickListener { updateStudent() }
+
+        adapter?.setOnClickDeleteItem { showMessage("se eliminara ${it.name}") }
     }
 
     private fun updateStudent() {
